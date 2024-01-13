@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+
+<body>
+    <form id="weatherForm">
+        <input type="text" id="location" placeholder="Enter the location"><br>
+        <input type="submit" value="Add">
+    </form>
+    <div id="weatherResult"></div>
+
+    <script>
+        const form = document.getElementById("weatherForm")
+        const locationInput = document.getElementById("location")
+        const weatherResult = document.getElementById("weatherResult")
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const location = locationInput.value.trim()
+
+            if (!location) {
+                alert("Please enter the location")
+                return
+            }
+
+            try {
+
+                const response = await fetch('/api/weather', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        location: location
+                    })
+                })
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data")
+                }
+
+                const weatherData = await response.json()
+                weatherResult.innerHTML = JSON.stringify(weatherData, null, 2)
+
+            } catch (error) {
+                console.error("Error fetching weather data", error)
+                weatherResult.innerHTML = 'Error fetching weather data'
+            }
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>

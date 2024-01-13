@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css" </head>
+
+<body>
+    <div class="wrapper">
+        <h1>Registration</h1>
+        <form id="reg-form">
+            <div class="input-box">
+                <input type="text" autocomplete="off" id="username" placeholder="Username" /> <br>
+            </div>
+            <div class="input-box">
+                <input type="password" autocomplete="off" id="password" placeholder="Password" /><br>
+            </div>
+            <div class="input-box">
+                <button class="btn"><input class="buttonSubmit" type="submit" value="Register" />
+                </button>
+            </div>
+
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById('reg-form')
+        form.addEventListener('submit', registerUser)
+
+        async function registerUser(event) {
+            event.preventDefault()
+            const username = document.getElementById('username').value
+            const password = document.getElementById('password').value
+
+            const result = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('success')
+            } else {
+                alert(result.error)
+            }
+        }
+
+    </script>
+    <a href="weatherpage.html">Click</a>
+</body>
+
+</html>

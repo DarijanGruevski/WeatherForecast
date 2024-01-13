@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+
+<body>
+    <h1>Weather forecast for the next 3 days</h1>
+
+    <form id="form">
+        <input type="text" placeholder="Enter the city" id="city"><br>
+        <input type="submit" value="Display">
+
+        <div id="result"></div>
+    </form>
+
+    <script>
+        const form = document.getElementById("form")
+        const cityInput = document.getElementById("city")
+        const result = document.getElementById("result")
+
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault()
+
+            const city = cityInput.value
+
+            if (!city) {
+                alert("please enter the city!")
+                return;
+            }
+
+            try {
+                const response = await fetch('/weathernext3days', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        city: city
+                    })
+                })
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data")
+                }
+                console.log("Tuka sme ")
+
+                const weatherData = await response.json()
+                console.log(weatherData)
+                result.innerHTML = JSON.stringify(weatherData, null, 2)
+
+
+            } catch (error) {
+                console.error("Error fetching weather data", error)
+                result.innerHTML = 'Error fetching weather data'
+            }
+        })
+    </script>
+
+</body>
+
+</html>
